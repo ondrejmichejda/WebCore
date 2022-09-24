@@ -7,11 +7,11 @@ import {HttpService} from "./Services/http/http.service";
     styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-    public data?: string;
+    public data: UserSelector;
 
     constructor(http: HttpService) {
 
-        http.get<string>('api/user/one').subscribe({
+        http.get<UserSelector>('api/user/one').subscribe({
             next: result => {
                 this.data = result
             },
@@ -20,4 +20,8 @@ export class AppComponent {
     }
 
     title = 'AngularFE';
+}
+
+interface UserSelector {
+    id?: number;
 }

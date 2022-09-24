@@ -4,7 +4,7 @@
 
 export const environment = {
     production: false,
-    apiPrefix: 'webcore.loc:8080/',
+    apiPrefix: 'http://webcore.loc:8080/',
 };
 
 /*

@@ -1,4 +1,22 @@
+using AspCoreBE.WebCoreSettings;
+
+IConfiguration configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json")
+    .Build();
+
 var builder = WebApplication.CreateBuilder(args);
+
+IWebCoreSettings WebCoreSettings = configuration.GetSection("WebCoreSettings").Get<WebCoreSettings>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            policy.WithOrigins().WithOrigins(WebCoreSettings.AllowedCorsDomains).AllowAnyHeader().AllowAnyMethod();
+        });
+});
+
 
 // Add services to the container.
 
@@ -17,6 +35,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.UseAuthorization();
 
