@@ -5,7 +5,7 @@ VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "AngularFE", "AngularFE\AngularFE.esproj", "{3D3DE391-A623-491D-B1FD-667145D63171}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspCoreBE", "AspCoreBE\AspCoreBE.csproj", "{3A03047D-CC41-405A-8B6C-9844AE9A80EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspCoreBE", "AspCoreBE\AspCoreBE.csproj", "{3A03047D-CC41-405A-8B6C-9844AE9A80EC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {HttpService} from "./Services/http/http.service";
+import {HttpClient} from "@angular/common/http";
 
 @Component({
     selector: 'app-root',
@@ -9,7 +9,7 @@ import {HttpService} from "./Services/http/http.service";
 export class AppComponent {
     public data: UserSelector;
 
-    constructor(http: HttpService) {
+    constructor(http: HttpClient) {
 
         http.get<UserSelector>('api/user/one').subscribe({
             next: result => {

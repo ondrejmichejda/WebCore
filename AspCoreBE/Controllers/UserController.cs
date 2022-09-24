@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AspCoreBE.Controllers
 {
-    [Route("/api/[controller]")]
+    [Route("/[controller]")]
     public class UserController : Controller
     {
         [HttpGet("one")]
