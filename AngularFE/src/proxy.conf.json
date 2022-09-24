@@ -1,7 +1,0 @@
-{
-  "/api/*": {
-    "target": "http://webcore.loc:81",
-    "changeOrigin": true,
-    "secure": false
-  }
-}
