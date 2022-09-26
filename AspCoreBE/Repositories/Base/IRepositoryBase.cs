@@ -1,41 +1,44 @@
 ﻿using AspCoreBE.Models;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 
-namespace AspCoreBE.Repositories
+namespace AspCoreBE.Repositories.Base
 {
-    public interface IRepository<T>
+    public interface IRepositoryBase<T>
     {
         /// <summary>
-        /// Return single instance
+        /// Return by expresssion
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public T Get(int id);
+        public IQueryable<T> Get(Expression<Func<T, bool>> expression);
 
         /// <summary>
         /// Return all instances
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<T> Get();
+        public IQueryable<T> Get();
 
         /// <summary>
         /// Add new instance and returns it
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public T Add(T data);
+        public T Create(T entity);
 
         /// <summary>
         /// Update instance and resturns it
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public T Update(T data);
+        public T Update(T entity);
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="id"></param>
-        public void Delete(int id);
+        public void Delete(T entity);
     }
 }

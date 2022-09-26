@@ -1,5 +1,6 @@
 using AspCoreBE.Context;
 using AspCoreBE.Repositories;
+using AspCoreBE.Repositories.Wrapper;
 using AspCoreBE.WebCoreSettings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -26,11 +27,10 @@ builder.Services.AddCors(options =>
 
 // Add services to the container.
 builder.Services.AddDbContext<WebCoreContext>(options => options.UseSqlServer(WebCoreSettings.DbConnectionString));
+builder.Services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-
-builder.Services.AddScoped<UserRepository>();
-
 
 var app = builder.Build();
 

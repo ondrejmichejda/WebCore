@@ -1,8 +1,8 @@
 ﻿using AspCoreBE.Context;
 using AspCoreBE.Models;
-using AspCoreBE.Repositories;
+using AspCoreBE.Repositories.User;
+using AspCoreBE.Repositories.Wrapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +12,8 @@ namespace AspCoreBE.Controllers
     [Route("/[controller]")]
     public class UserController : Controller
     {
-        private readonly UserRepository repo;
-        public UserController(UserRepository repo)
+        private readonly IRepositoryWrapper repo;
+        public UserController(IRepositoryWrapper repo)
         {
             this.repo = repo;
         }
@@ -27,7 +27,7 @@ namespace AspCoreBE.Controllers
         {
             try
             {
-                return Ok(repo.Get());
+                return Ok(repo.Users.Get());
             }
             catch (Exception)
             {
@@ -46,7 +46,7 @@ namespace AspCoreBE.Controllers
         {
             try
             {
-                var data = repo.Get(id);
+                var data = repo.Users.Get(x => x.Id.Equals(id)).FirstOrDefault();
                 return data == null ? NotFound() : data;
             }
             catch (Exception)
@@ -61,11 +61,13 @@ namespace AspCoreBE.Controllers
         /// </summary>
         /// <param name="value"></param>
         [HttpPost]
-        public ActionResult<UserModel> Add([FromBody] UserModel value)
+        public ActionResult<UserModel> Create([FromBody] UserModel value)
         {
             try
             {
-                return CreatedAtAction(nameof(Add), repo.Add(value));
+                var newUser = repo.Users.Create(value);
+                repo.Save();
+                return CreatedAtAction(nameof(Create), newUser);
             }
             catch (Exception)
             {
@@ -80,16 +82,19 @@ namespace AspCoreBE.Controllers
         /// <param name="id"></param>
         /// <param name="value"></param>
         [HttpPut("{id}")]
-        public ActionResult<UserModel> Edit(int id, [FromBody] UserModel value)
+        public ActionResult<UserModel> Update(int id, [FromBody] UserModel value)
         {
             try
             {
                 if (!id.Equals(value.Id)) return BadRequest();
 
-                var user = repo.Get(id);
+                var user = repo.Users.Get(x => x.Id.Equals(id)).FirstOrDefault();
                 if (user == null) return NotFound();
 
-                return Ok(repo.Update(user));
+                var updatedUser = repo.Users.Update(value);
+                repo.Save();
+
+                return Ok(updatedUser);
             }
             catch (Exception)
             {
@@ -107,10 +112,11 @@ namespace AspCoreBE.Controllers
         {
             try
             {
-                var user = repo.Get(id);
-                if (user == null) return NotFound();
+                var userToDelete = repo.Users.Get(x => x.Id.Equals(id)).FirstOrDefault();
+                if (userToDelete == null) return NotFound();
 
-                repo.Delete(id);
+                repo.Users.Delete(userToDelete);
+                repo.Save();
                 return Ok();
             }
             catch (Exception)
