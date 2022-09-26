@@ -1,12 +1,12 @@
-import {Component, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
+import {Component, OnInit} from "@angular/core";
 
 @Component({
-    selector: 'cmp-user-example',
-    templateUrl: './user-example.component.html',
-    styleUrls: ['./user-example.component.css']
+    selector: 'cmp-CRUD-Example',
+    templateUrl: './crud-example.component.html',
+    styleUrls: ['./crud-example.component.scss']
 })
-export class UserExampleComponent implements OnInit {
+export class CrudExampleComponent implements OnInit {
 
     users: User[];
     user: User;
@@ -30,7 +30,7 @@ export class UserExampleComponent implements OnInit {
     getOne(id: string): void{
         this.http.get<User>('/api/user/' + id).subscribe({
             next: res => this.user = res,
-            error: err => this.user = {id: 0, name: 'nenaslo me'}
+            error: () => this.user = {id: 0, name: 'nenaslo me'}
         });
     }
 

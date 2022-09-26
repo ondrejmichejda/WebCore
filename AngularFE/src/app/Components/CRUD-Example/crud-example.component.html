@@ -4,7 +4,8 @@
 <div>
     <input #me (change)="getOne(me.value)" />
     Single user: <span *ngIf="user">{{user.name}}</span></div>
-<table>
+<table class="table">
+    <thead>
     <tr>
         <th>
             Id
@@ -13,12 +14,13 @@
             Name
         </th>
     </tr>
+    </thead>
     <tr *ngFor="let user of users">
         <td>{{user.id}}</td>
-        <td><input [(ngModel)]="user.name" /></td>
+        <td><input class="form-control" [(ngModel)]="user.name" /></td>
         <td>
-            <button (click)="edit(user)">edit</button>
-            <button (click)="delete(user)">delete</button>
+            <button class="btn" (click)="edit(user)">edit</button>
+            <button class="btn" (click)="delete(user)">delete</button>
         </td>
     </tr>
 </table>

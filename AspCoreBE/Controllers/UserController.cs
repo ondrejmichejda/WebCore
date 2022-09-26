@@ -10,7 +10,7 @@ using System.Linq;
 namespace AspCoreBE.Controllers
 {
     [Route("/[controller]")]
-    public class UserController : Controller
+    public class UserController : ControllerBase
     {
         private readonly IRepositoryWrapper repo;
         public UserController(IRepositoryWrapper repo)
