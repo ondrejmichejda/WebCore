@@ -2,6 +2,7 @@
 using AspCoreBE.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -21,9 +22,17 @@ namespace AspCoreBE.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public IEnumerable<User> Get()
+        public ActionResult<IEnumerable<User>> Get()
         {
-            return _context.Users;
+            try
+            {
+                return Ok(_context.Users);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
+
         }
 
         /// <summary>
@@ -32,9 +41,18 @@ namespace AspCoreBE.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public User Get(int id)
+        public ActionResult<User> Get(int id)
         {
-            return _context.Users.FirstOrDefault(u => u.Id.Equals(id));
+            try
+            {
+                var data = _context.Users.FirstOrDefault(u => u.Id.Equals(id));
+                return data == null ? NotFound() : data;
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
+
         }
 
         /// <summary>
@@ -42,64 +60,66 @@ namespace AspCoreBE.Controllers
         /// </summary>
         /// <param name="value"></param>
         [HttpPost]
-        public void Post([FromBody] User value)
+        public ActionResult<User> Add([FromBody] User value)
         {
-            _context.Users.Add(value);
-            _context.SaveChanges();
+            try
+            {
+                _context.Users.Add(value);
+                _context.SaveChanges();
+                return CreatedAtAction(nameof(Add), value);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
+
         }
 
-        //[Route("/update")]
-        //[HttpPost("{id}")]
-        //public void Put(int id, [FromBody] User value)
-        //{
-        //    var user = _context.Users.FirstOrDefault(s => s.Id.Equals(id));
-        //    if (user != null)
-        //    {
-        //        _context.Entry<User>(user).CurrentValues.SetValues(value);
-        //        _context.SaveChanges();
-        //    }
-        //}
-
         /// <summary>
-        /// PUT /[controller]
+        /// PUT /[controller]/id
         /// </summary>
         /// <param name="id"></param>
         /// <param name="value"></param>
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] User value)
+        public ActionResult<User> Edit(int id, [FromBody] User value)
         {
-            var user = _context.Users.FirstOrDefault(s => s.Id.Equals(id));
-            if (user != null)
+            try
             {
+                if (!id.Equals(value.Id)) return BadRequest();
+
+                var user = _context.Users.FirstOrDefault(s => s.Id.Equals(id));
+                if (user == null) return NotFound();
+
                 _context.Entry<User>(user).CurrentValues.SetValues(value);
                 _context.SaveChanges();
+                return Ok(value);
             }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
+
         }
 
-        //[Route("/delete")]
-        //[HttpGet("{id}")]
-        //public void Delete(int id)
-        //{
-        //    var user = _context.Users.FirstOrDefault(s => s.Id == id);
-        //    if (user != null)
-        //    {
-        //        _context.Users.Remove(user);
-        //        _context.SaveChanges();
-        //    }
-        //}
-
         /// <summary>
-        /// DELETE /[controller]
+        /// DELETE /[controller]/{id}
         /// </summary>
         /// <param name="id"></param>
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public ActionResult Delete(int id)
         {
-            var user = _context.Users.FirstOrDefault(s => s.Id == id);
-            if (user != null)
+            try
             {
+                var user = _context.Users.FirstOrDefault(s => s.Id == id);
+                if (user == null) return NotFound();
+
                 _context.Users.Remove(user);
                 _context.SaveChanges();
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
             }
         }
     }

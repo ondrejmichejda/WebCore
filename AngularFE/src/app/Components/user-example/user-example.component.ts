@@ -16,18 +16,21 @@ export class UserExampleComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.refresh();
+        this.getAll();
     }
 
-    refresh() {
+    getAll() {
+        this.users = [];
         this.http.get<User[]>('/api/user').subscribe({
             next: res => {this.users = res},
             error: err => console.error(err)
         });
+    }
 
-        this.http.get<User>('/api/user/2').subscribe({
+    getOne(id: string): void{
+        this.http.get<User>('/api/user/' + id).subscribe({
             next: res => this.user = res,
-            error: err => console.error(err)
+            error: err => this.user = {id: 0, name: 'nenaslo me'}
         });
     }
 
@@ -35,10 +38,25 @@ export class UserExampleComponent implements OnInit {
         if(this.newUser.length){
             const body = {Id: null, Name: this.newUser};
             this.http.post('api/user', body).subscribe({
-                next: () => this.refresh(),
+                next: res => {
+                    // console.log(res);
+                    this.getAll();
+                },
                 error: err => console.error(err)
             });
         }
+    }
+
+    edit(user: User) {
+        this.http.put('/api/user/'+user.id, user).subscribe({
+            next: () => this.getAll()
+        });
+    }
+
+    delete(user: User) {
+        this.http.delete('/api/user/'+user.id).subscribe({
+            next: () => this.getAll()
+        });
     }
 }
 

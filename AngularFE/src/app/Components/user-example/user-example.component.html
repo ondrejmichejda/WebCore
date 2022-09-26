@@ -1,7 +1,9 @@
 <h1>User CRUD example</h1>
 
 <h4>GET</h4>
-<span *ngIf="user">Single user: {{user.name}}</span>
+<div>
+    <input #me (change)="getOne(me.value)" />
+    Single user: <span *ngIf="user">{{user.name}}</span></div>
 <table>
     <tr>
         <th>
@@ -13,7 +15,11 @@
     </tr>
     <tr *ngFor="let user of users">
         <td>{{user.id}}</td>
-        <td>{{user.name}}</td>
+        <td><input [(ngModel)]="user.name" /></td>
+        <td>
+            <button (click)="edit(user)">edit</button>
+            <button (click)="delete(user)">delete</button>
+        </td>
     </tr>
 </table>
 
