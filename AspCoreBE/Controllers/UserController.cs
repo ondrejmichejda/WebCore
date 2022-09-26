@@ -1,5 +1,6 @@
 ﻿using AspCoreBE.Context;
 using AspCoreBE.Models;
+using AspCoreBE.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,10 +12,10 @@ namespace AspCoreBE.Controllers
     [Route("/[controller]")]
     public class UserController : Controller
     {
-        private WebCoreContext _context;
-        public UserController(WebCoreContext context)
+        private readonly UserRepository repo;
+        public UserController(UserRepository repo)
         {
-            _context = context;
+            this.repo = repo;
         }
 
         /// <summary>
@@ -22,11 +23,11 @@ namespace AspCoreBE.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult<IEnumerable<User>> Get()
+        public ActionResult<IEnumerable<UserModel>> Get()
         {
             try
             {
-                return Ok(_context.Users);
+                return Ok(repo.Get());
             }
             catch (Exception)
             {
@@ -41,11 +42,11 @@ namespace AspCoreBE.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public ActionResult<User> Get(int id)
+        public ActionResult<UserModel> Get(int id)
         {
             try
             {
-                var data = _context.Users.FirstOrDefault(u => u.Id.Equals(id));
+                var data = repo.Get(id);
                 return data == null ? NotFound() : data;
             }
             catch (Exception)
@@ -60,13 +61,11 @@ namespace AspCoreBE.Controllers
         /// </summary>
         /// <param name="value"></param>
         [HttpPost]
-        public ActionResult<User> Add([FromBody] User value)
+        public ActionResult<UserModel> Add([FromBody] UserModel value)
         {
             try
             {
-                _context.Users.Add(value);
-                _context.SaveChanges();
-                return CreatedAtAction(nameof(Add), value);
+                return CreatedAtAction(nameof(Add), repo.Add(value));
             }
             catch (Exception)
             {
@@ -81,18 +80,16 @@ namespace AspCoreBE.Controllers
         /// <param name="id"></param>
         /// <param name="value"></param>
         [HttpPut("{id}")]
-        public ActionResult<User> Edit(int id, [FromBody] User value)
+        public ActionResult<UserModel> Edit(int id, [FromBody] UserModel value)
         {
             try
             {
                 if (!id.Equals(value.Id)) return BadRequest();
 
-                var user = _context.Users.FirstOrDefault(s => s.Id.Equals(id));
+                var user = repo.Get(id);
                 if (user == null) return NotFound();
 
-                _context.Entry<User>(user).CurrentValues.SetValues(value);
-                _context.SaveChanges();
-                return Ok(value);
+                return Ok(repo.Update(user));
             }
             catch (Exception)
             {
@@ -110,11 +107,10 @@ namespace AspCoreBE.Controllers
         {
             try
             {
-                var user = _context.Users.FirstOrDefault(s => s.Id == id);
+                var user = repo.Get(id);
                 if (user == null) return NotFound();
 
-                _context.Users.Remove(user);
-                _context.SaveChanges();
+                repo.Delete(id);
                 return Ok();
             }
             catch (Exception)

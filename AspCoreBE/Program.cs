@@ -1,4 +1,5 @@
 using AspCoreBE.Context;
+using AspCoreBE.Repositories;
 using AspCoreBE.WebCoreSettings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -24,13 +25,12 @@ builder.Services.AddCors(options =>
 
 
 // Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-// builder.Services.AddSwaggerGen();
-
 builder.Services.AddDbContext<WebCoreContext>(options => options.UseSqlServer(WebCoreSettings.DbConnectionString));
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddScoped<UserRepository>();
+
 
 var app = builder.Build();
 

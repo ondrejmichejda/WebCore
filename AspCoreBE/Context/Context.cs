@@ -10,6 +10,6 @@ namespace AspCoreBE.Context
 
         }
 
-        public DbSet<User> Users { get; set; } = null!;
+        public DbSet<UserModel> Users { get; set; } = null!;
     }
 }
