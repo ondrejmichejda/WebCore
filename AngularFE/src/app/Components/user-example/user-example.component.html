@@ -1,0 +1,22 @@
+<h1>User CRUD example</h1>
+
+<h4>GET</h4>
+<span *ngIf="user">Single user: {{user.name}}</span>
+<table>
+    <tr>
+        <th>
+            Id
+        </th>
+        <th>
+            Name
+        </th>
+    </tr>
+    <tr *ngFor="let user of users">
+        <td>{{user.id}}</td>
+        <td>{{user.name}}</td>
+    </tr>
+</table>
+
+<h4>POST</h4>
+<input [(ngModel)]="newUser" type="text" />
+<button (click)="addUser()">Add</button>

@@ -16,28 +16,56 @@ namespace AspCoreBE.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// GET /[controller]
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IEnumerable<User> Get()
         {
             return _context.Users;
         }
 
+        /// <summary>
+        /// GET /[controller]/{id}
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public User Get(int id)
         {
             return _context.Users.FirstOrDefault(u => u.Id.Equals(id));
         }
 
+        /// <summary>
+        /// POST /[controller]
+        /// </summary>
+        /// <param name="value"></param>
         [HttpPost]
-        [Route("/add")]
         public void Post([FromBody] User value)
         {
             _context.Users.Add(value);
             _context.SaveChanges();
         }
 
-        [Route("/update")]
-        [HttpPost("{id}")]
+        //[Route("/update")]
+        //[HttpPost("{id}")]
+        //public void Put(int id, [FromBody] User value)
+        //{
+        //    var user = _context.Users.FirstOrDefault(s => s.Id.Equals(id));
+        //    if (user != null)
+        //    {
+        //        _context.Entry<User>(user).CurrentValues.SetValues(value);
+        //        _context.SaveChanges();
+        //    }
+        //}
+
+        /// <summary>
+        /// PUT /[controller]
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="value"></param>
+        [HttpPut("{id}")]
         public void Put(int id, [FromBody] User value)
         {
             var user = _context.Users.FirstOrDefault(s => s.Id.Equals(id));
@@ -48,8 +76,23 @@ namespace AspCoreBE.Controllers
             }
         }
 
-        [Route("/delete")]
-        [HttpGet("{id}")]
+        //[Route("/delete")]
+        //[HttpGet("{id}")]
+        //public void Delete(int id)
+        //{
+        //    var user = _context.Users.FirstOrDefault(s => s.Id == id);
+        //    if (user != null)
+        //    {
+        //        _context.Users.Remove(user);
+        //        _context.SaveChanges();
+        //    }
+        //}
+
+        /// <summary>
+        /// DELETE /[controller]
+        /// </summary>
+        /// <param name="id"></param>
+        [HttpDelete("{id}")]
         public void Delete(int id)
         {
             var user = _context.Users.FirstOrDefault(s => s.Id == id);

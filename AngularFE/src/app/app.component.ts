@@ -1,5 +1,4 @@
 import {Component} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
 
 @Component({
     selector: 'app-root',
@@ -7,21 +6,7 @@ import {HttpClient} from "@angular/common/http";
     styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-    public data: UserSelector;
 
-    constructor(http: HttpClient) {
-
-        http.get<UserSelector>('api/user/one').subscribe({
-            next: result => {
-                this.data = result
-            },
-            error: error => console.error(error)
-        });
+    constructor() {
     }
-
-    title = 'AngularFE';
-}
-
-interface UserSelector {
-    id?: number;
 }
